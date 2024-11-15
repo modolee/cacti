@@ -5,11 +5,12 @@ import { getUserFromPseudonim, getEthAddress, getFabricId } from "./common";
 const FABRIC_CHANNEL_NAME = "mychannel";
 const FABRIC_CONTRACT_CBDC_ERC20_NAME = "cbdc";
 const FABRIC_CONTRACT_ASSET_REF_NAME = "asset-reference-contract";
+const BACKEND_HOST = process.env.REACT_APP_BACKEND_HOST;
 
 export async function getFabricBalance(frontendUser: string) {
   const fabricID = getFabricId(frontendUser);
   const response = await axios.post(
-    "http://localhost:4000/api/v1/plugins/@hyperledger/cactus-plugin-ledger-connector-fabric/run-transaction",
+    `http://${BACKEND_HOST}:4000/api/v1/plugins/@hyperledger/cactus-plugin-ledger-connector-fabric/run-transaction`,
     {
       contractName: FABRIC_CONTRACT_CBDC_ERC20_NAME,
       channelName: FABRIC_CHANNEL_NAME,
@@ -28,7 +29,7 @@ export async function getFabricBalance(frontendUser: string) {
 
 export async function mintTokensFabric(frontendUser: string, amount: string) {
   const response = await axios.post(
-    "http://localhost:4000/api/v1/plugins/@hyperledger/cactus-plugin-ledger-connector-fabric/run-transaction",
+    `http://${BACKEND_HOST}:4000/api/v1/plugins/@hyperledger/cactus-plugin-ledger-connector-fabric/run-transaction`,
     {
       contractName: FABRIC_CONTRACT_CBDC_ERC20_NAME,
       channelName: FABRIC_CHANNEL_NAME,
@@ -54,7 +55,7 @@ export async function transferTokensFabric(
 ) {
   const to = getFabricId(frontendUserTo);
   const response = await axios.post(
-    "http://localhost:4000/api/v1/plugins/@hyperledger/cactus-plugin-ledger-connector-fabric/run-transaction",
+    `http://${BACKEND_HOST}:4000/api/v1/plugins/@hyperledger/cactus-plugin-ledger-connector-fabric/run-transaction`,
     {
       contractName: FABRIC_CONTRACT_CBDC_ERC20_NAME,
       channelName: FABRIC_CHANNEL_NAME,
@@ -73,9 +74,13 @@ export async function transferTokensFabric(
   }
 }
 
-export async function escrowTokensFabric(frontendUser: string, amount: string, assetRefID: string) {
+export async function escrowTokensFabric(
+  frontendUser: string,
+  amount: string,
+  assetRefID: string,
+) {
   const response = await axios.post(
-    "http://localhost:4000/api/v1/plugins/@hyperledger/cactus-plugin-ledger-connector-fabric/run-transaction",
+    `http://${BACKEND_HOST}:4000/api/v1/plugins/@hyperledger/cactus-plugin-ledger-connector-fabric/run-transaction`,
     {
       contractName: FABRIC_CONTRACT_CBDC_ERC20_NAME,
       channelName: FABRIC_CHANNEL_NAME,
@@ -94,7 +99,11 @@ export async function escrowTokensFabric(frontendUser: string, amount: string, a
   }
 }
 
-export async function bridgeOutTokensFabric(frontendUser: string, amount: string, assetRefID: string) {
+export async function bridgeOutTokensFabric(
+  frontendUser: string,
+  amount: string,
+  assetRefID: string,
+) {
   const fabricID = getFabricId(frontendUser);
   const address = getEthAddress(frontendUser);
 
@@ -109,13 +118,13 @@ export async function bridgeOutTokensFabric(frontendUser: string, amount: string
   };
 
   await axios.post(
-    "http://localhost:4000/api/v1/@hyperledger/cactus-plugin-satp-hermes/clientrequest",
+    `http://${BACKEND_HOST}:4000/api/v1/@hyperledger/cactus-plugin-satp-hermes/clientrequest`,
     {
       clientGatewayConfiguration: {
-        apiHost: `http://localhost:4000`,
+        apiHost: `http://${BACKEND_HOST}:4000`,
       },
       serverGatewayConfiguration: {
-        apiHost: `http://localhost:4100`,
+        apiHost: `http://${BACKEND_HOST}:4100`,
       },
       version: "0.0.0",
       loggingProfile: "dummyLoggingProfile",
@@ -146,7 +155,7 @@ export async function bridgeOutTokensFabric(frontendUser: string, amount: string
 
 export async function getAssetReferencesFabric(frontendUser: string) {
   const response = await axios.post(
-    "http://localhost:4000/api/v1/plugins/@hyperledger/cactus-plugin-ledger-connector-fabric/run-transaction",
+    `http://${BACKEND_HOST}:4000/api/v1/plugins/@hyperledger/cactus-plugin-ledger-connector-fabric/run-transaction`,
     {
       contractName: FABRIC_CONTRACT_ASSET_REF_NAME,
       channelName: FABRIC_CHANNEL_NAME,

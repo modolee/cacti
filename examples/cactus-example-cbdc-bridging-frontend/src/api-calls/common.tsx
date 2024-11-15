@@ -1,6 +1,8 @@
 import axios from "axios";
 import CryptoMaterial from "../crypto-material/crypto-material.json";
 
+const BACKEND_HOST = process.env.REACT_APP_BACKEND_HOST;
+
 // Input: [Alice, Charlie, Bridge]
 export function getUserFromPseudonim(user: string) {
   switch (user) {
@@ -55,9 +57,9 @@ export function getEthUserPrKey(user: string) {
 }
 
 export async function checkApiServer1Connection() {
-  await axios.get("http://localhost:4000/api/v1/api-server/healthcheck");
+  await axios.get(`http://${BACKEND_HOST}:4000/api/v1/api-server/healthcheck`);
 }
 
 export async function checkApiServer2Connection() {
-  await axios.get("http://localhost:4100/api/v1/api-server/healthcheck");
+  await axios.get(`http://${BACKEND_HOST}:4100/api/v1/api-server/healthcheck`);
 }

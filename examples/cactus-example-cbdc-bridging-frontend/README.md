@@ -8,8 +8,10 @@
 
 ### Building the image
 
-```docker build -t cbdc-app-frontend .
-docker run -p 2000:2000 cbdc-app-frontend```
+```
+docker build -t cbdc-app-frontend .
+docker run -p 2000:2000 -e REACT_APP_BACKEND_HOST=<cactus-example-cbdc-bridging-backend-address> cbdc-app-frontend
+```
 
 ## `npm start`
 

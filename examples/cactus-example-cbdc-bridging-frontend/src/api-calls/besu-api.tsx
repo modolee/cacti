@@ -4,6 +4,7 @@ import { getEthAddress, getEthUserPrKey, getFabricId } from "./common";
 
 const BESU_CONTRACT_CBDC_ERC20_NAME = "CBDCcontract";
 const BESU_CONTRACT_ASSET_REF_NAME = "AssetReferenceContract";
+const BACKEND_HOST = process.env.REACT_APP_BACKEND_HOST;
 
 export async function transferTokensBesu(
   frontendUserFrom: string,
@@ -13,7 +14,7 @@ export async function transferTokensBesu(
   const from = getEthAddress(frontendUserFrom);
   const to = getEthAddress(frontendUserTo);
   await axios.post(
-    "http://localhost:4100/api/v1/plugins/@hyperledger/cactus-plugin-ledger-connector-besu/invoke-contract",
+    `http://${BACKEND_HOST}:4100/api/v1/plugins/@hyperledger/cactus-plugin-ledger-connector-besu/invoke-contract`,
     {
       contractName: BESU_CONTRACT_CBDC_ERC20_NAME,
       invocationType: "SEND",
@@ -33,12 +34,12 @@ export async function transferTokensBesu(
 export async function escrowTokensBesu(
   frontendUserFrom: string,
   amount: number,
-  assetRefID: string
+  assetRefID: string,
 ) {
   const from = getEthAddress(frontendUserFrom);
 
   await axios.post(
-    "http://localhost:4100/api/v1/plugins/@hyperledger/cactus-plugin-ledger-connector-besu/invoke-contract",
+    `http://${BACKEND_HOST}:4100/api/v1/plugins/@hyperledger/cactus-plugin-ledger-connector-besu/invoke-contract`,
     {
       contractName: BESU_CONTRACT_CBDC_ERC20_NAME,
       invocationType: "SEND",
@@ -59,7 +60,7 @@ export async function getAssetReferencesBesu(frontendUser: string) {
   const from = getEthAddress(frontendUser);
 
   const response = await axios.post(
-    "http://localhost:4100/api/v1/plugins/@hyperledger/cactus-plugin-ledger-connector-besu/invoke-contract",
+    `http://${BACKEND_HOST}:4100/api/v1/plugins/@hyperledger/cactus-plugin-ledger-connector-besu/invoke-contract`,
     {
       contractName: BESU_CONTRACT_ASSET_REF_NAME,
       invocationType: "CALL",
@@ -84,7 +85,11 @@ export async function getAssetReferencesBesu(frontendUser: string) {
   });
 }
 
-export async function bridgeBackTokensBesu(frontendUser: string, amount: number, assetRefID: string) {
+export async function bridgeBackTokensBesu(
+  frontendUser: string,
+  amount: number,
+  assetRefID: string,
+) {
   const address = getEthAddress(frontendUser);
   const fabricID = getFabricId(frontendUser);
 
@@ -99,13 +104,13 @@ export async function bridgeBackTokensBesu(frontendUser: string, amount: number,
   };
 
   await axios.post(
-    "http://localhost:4100/api/v1/@hyperledger/cactus-plugin-satp-hermes/clientrequest",
+    `http://${BACKEND_HOST}:4100/api/v1/@hyperledger/cactus-plugin-satp-hermes/clientrequest`,
     {
       clientGatewayConfiguration: {
-        apiHost: `http://localhost:4100`,
+        apiHost: `http://${BACKEND_HOST}:4100`,
       },
       serverGatewayConfiguration: {
-        apiHost: `http://localhost:4000`,
+        apiHost: `http://${BACKEND_HOST}:4000`,
       },
       version: "0.0.0",
       loggingProfile: "dummyLoggingProfile",
@@ -138,7 +143,7 @@ export async function getBesuBalance(frontendUser: string) {
   const userEthAddress = getEthAddress(frontendUser);
 
   const response = await axios.post(
-    "http://localhost:4100/api/v1/plugins/@hyperledger/cactus-plugin-ledger-connector-besu/invoke-contract",
+    `http://${BACKEND_HOST}:4100/api/v1/plugins/@hyperledger/cactus-plugin-ledger-connector-besu/invoke-contract`,
     {
       contractName: BESU_CONTRACT_CBDC_ERC20_NAME,
       invocationType: "CALL",
